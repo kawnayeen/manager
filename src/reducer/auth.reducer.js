@@ -1,14 +1,16 @@
 /**
  * Created by kawnayeen on 4/18/17.
  */
-import { EMAIL_CHANGED } from '../actions/type';
+import { EMAIL_CHANGED, PASSWORD_CHANGED } from '../actions/type';
 
-const INITIAL_STATE = { email: '' };
+const INITIAL_STATE = { email: '', password: '' };
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case EMAIL_CHANGED:
-            break;
+            return { ...state, email: action.payload };
+        case PASSWORD_CHANGED:
+            return { ...state, password: action.payload };
         default:
             return state;
     }
