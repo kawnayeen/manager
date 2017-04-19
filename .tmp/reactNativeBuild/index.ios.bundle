@@ -60665,11 +60665,24 @@ var _login = require(474                      ); // 474 = ./components/login.for
 
 var _login2 = babelHelpers.interopRequireDefault(_login);
 
+var _employee = require(531                         ); // 531 = ./components/employee.list
+
+var _employee2 = babelHelpers.interopRequireDefault(_employee);
+
 var RouterComponent = function RouterComponent() {
     return _react2.default.createElement(
         _reactNativeRouterFlux.Router,
         { sceneStyle: { paddingTop: 65 } },
-        _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'login', component: _login2.default, title: 'Please Login' })
+        _react2.default.createElement(
+            _reactNativeRouterFlux.Scene,
+            { key: 'auth' },
+            _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'login', component: _login2.default, title: 'Please Login' })
+        ),
+        _react2.default.createElement(
+            _reactNativeRouterFlux.Scene,
+            { key: 'main' },
+            _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'employeeList', component: _employee2.default, title: 'Employees' })
+        )
     );
 };
 
@@ -65901,6 +65914,8 @@ var _firebase = require(459       ); // 459 = firebase
 
 var _firebase2 = babelHelpers.interopRequireDefault(_firebase);
 
+var _reactNativeRouterFlux = require(484                       ); // 484 = react-native-router-flux
+
 var _type = require(473     ); // 473 = ./type
 
 var emailChanged = exports.emailChanged = function emailChanged(text) {
@@ -65943,8 +65958,46 @@ var loginUserFail = function loginUserFail(dispatch) {
 
 var loginUserSuccess = function loginUserSuccess(dispatch, user) {
     dispatch({ type: _type.LOGIN_USER_SUCCESS, payload: user });
+    _reactNativeRouterFlux.Actions.main();
 };
 }, 482, null, "manager/src/actions/index.js");
+__d(/* manager/src/components/employee.list.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = require(291    ); // 291 = react
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require(12            ); // 12 = react-native
+
+var EmployeeList = function (_Component) {
+    babelHelpers.inherits(EmployeeList, _Component);
+
+    function EmployeeList() {
+        babelHelpers.classCallCheck(this, EmployeeList);
+        return babelHelpers.possibleConstructorReturn(this, (EmployeeList.__proto__ || Object.getPrototypeOf(EmployeeList)).apply(this, arguments));
+    }
+
+    babelHelpers.createClass(EmployeeList, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                _reactNative.View,
+                null,
+                _react2.default.createElement(
+                    _reactNative.Text,
+                    null,
+                    'Employee List'
+                )
+            );
+        }
+    }]);
+    return EmployeeList;
+}(_react.Component);
+
+exports.default = EmployeeList;
+}, 531, null, "manager/src/components/employee.list.js");
 ;require(72);
 ;require(0);
 //# sourceMappingURL=index.ios.map
