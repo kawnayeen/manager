@@ -60669,6 +60669,10 @@ var _employee = require(531                         ); // 531 = ./components/emp
 
 var _employee2 = babelHelpers.interopRequireDefault(_employee);
 
+var _employee3 = require(532                           ); // 532 = ./components/employee.create
+
+var _employee4 = babelHelpers.interopRequireDefault(_employee3);
+
 var RouterComponent = function RouterComponent() {
     return _react2.default.createElement(
         _reactNativeRouterFlux.Router,
@@ -60681,7 +60685,21 @@ var RouterComponent = function RouterComponent() {
         _react2.default.createElement(
             _reactNativeRouterFlux.Scene,
             { key: 'main' },
-            _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'employeeList', component: _employee2.default, title: 'Employees' })
+            _react2.default.createElement(_reactNativeRouterFlux.Scene, {
+                onRight: function onRight() {
+                    return _reactNativeRouterFlux.Actions.employeeCreate();
+                },
+                rightTitle: 'Add',
+                key: 'employeeList',
+                component: _employee2.default,
+                title: 'Employees',
+                initial: true
+            }),
+            _react2.default.createElement(_reactNativeRouterFlux.Scene, {
+                key: 'employeeCreate',
+                component: _employee4.default,
+                title: 'Create Employee'
+            })
         )
     );
 };
@@ -65998,6 +66016,43 @@ var EmployeeList = function (_Component) {
 
 exports.default = EmployeeList;
 }, 531, null, "manager/src/components/employee.list.js");
+__d(/* manager/src/components/employee.create.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = require(291    ); // 291 = react
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require(12            ); // 12 = react-native
+
+var EmployeeCreate = function (_Component) {
+    babelHelpers.inherits(EmployeeCreate, _Component);
+
+    function EmployeeCreate() {
+        babelHelpers.classCallCheck(this, EmployeeCreate);
+        return babelHelpers.possibleConstructorReturn(this, (EmployeeCreate.__proto__ || Object.getPrototypeOf(EmployeeCreate)).apply(this, arguments));
+    }
+
+    babelHelpers.createClass(EmployeeCreate, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                _reactNative.View,
+                null,
+                _react2.default.createElement(
+                    _reactNative.Text,
+                    null,
+                    ' Create New Employee '
+                )
+            );
+        }
+    }]);
+    return EmployeeCreate;
+}(_react.Component);
+
+exports.default = EmployeeCreate;
+}, 532, null, "manager/src/components/employee.create.js");
 ;require(72);
 ;require(0);
 //# sourceMappingURL=index.ios.map
