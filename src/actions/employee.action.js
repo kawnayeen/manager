@@ -1,9 +1,25 @@
 /**
  * Created by kawnayeen on 4/20/17.
  */
-import { EMPLOYEE_UPDATE } from './type';
+import firebase from 'firebase';
+import { Actions } from 'react-native-router-flux';
+import { EMPLOYEE_UPDATE, EMPLOYEE_CREATE } from './type';
 
 export const employeeUpdate = ({ prop, value }) => ({
     type: EMPLOYEE_UPDATE,
     payload: { prop, value }
 });
+
+export const employeeCreate = ({ name, phone, shift }) => {
+    const { currentUser } = firebase.auth();
+
+    return (dispatch) => {
+        firebase.database()
+            .ref(`/users/${currentUser.uid}/employees`)
+            .push({ name, phone, shift })
+            .then(() => {
+                dispatch({ type: EMPLOYEE_CREATE });
+                Actions.employeeList({ type: 'reset' });
+            });
+    };
+};
