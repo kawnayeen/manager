@@ -66014,8 +66014,8 @@ var _card = require(528               ); // 528 = ./card.selection
 var _button = require(526       ); // 526 = ./button
 
 var Confirm = function Confirm(_ref) {
-    var visible = _ref.visible,
-        message = _ref.message,
+    var children = _ref.children,
+        visible = _ref.visible,
         onAccept = _ref.onAccept,
         onDecline = _ref.onDecline;
     var containerStyle = styles.containerStyle,
@@ -66039,7 +66039,7 @@ var Confirm = function Confirm(_ref) {
                 _react2.default.createElement(
                     _reactNative.Text,
                     { style: textStyle },
-                    message
+                    children
                 )
             ),
             _react2.default.createElement(
@@ -66167,7 +66167,7 @@ var loginUserSuccess = function loginUserSuccess(dispatch, user) {
 __d(/* manager/src/actions/employee.action.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.employeeSave = exports.employeeFetch = exports.employeeCreate = exports.employeeUpdate = undefined;
+exports.employeeDelete = exports.employeeSave = exports.employeeFetch = exports.employeeCreate = exports.employeeUpdate = undefined;
 
 var _firebase = require(459       ); // 459 = firebase
 
@@ -66227,6 +66227,20 @@ var employeeSave = exports.employeeSave = function employeeSave(_ref3) {
 
     return function (dispatch) {
         _firebase2.default.database().ref('/users/' + currentUser.uid + '/employees/' + uid).set({ name: name, phone: phone, shift: shift }).then(function () {
+            dispatch({ type: _type.EMPLOYEE_SAVE_SUCCESS });
+            _reactNativeRouterFlux.Actions.employeeList({ type: 'reset' });
+        });
+    };
+};
+
+var employeeDelete = exports.employeeDelete = function employeeDelete(_ref4) {
+    var uid = _ref4.uid;
+
+    var _firebase$auth4 = _firebase2.default.auth(),
+        currentUser = _firebase$auth4.currentUser;
+
+    return function (dispatch) {
+        _firebase2.default.database().ref('/users/' + currentUser.uid + '/employees/' + uid).remove().then(function () {
             dispatch({ type: _type.EMPLOYEE_SAVE_SUCCESS });
             _reactNativeRouterFlux.Actions.employeeList({ type: 'reset' });
         });
@@ -73260,6 +73274,16 @@ var EmployeeEdit = function (_Component) {
             _reactNativeCommunications2.default.text(phone, 'Your upcoming shift is on ' + shift);
         }
     }, {
+        key: 'onAccept',
+        value: function onAccept() {
+            this.props.employeeDelete({ uid: this.props.employee.uid });
+        }
+    }, {
+        key: 'onDecline',
+        value: function onDecline() {
+            this.setState({ showModal: false });
+        }
+    }, {
         key: 'render',
         value: function render() {
             var _this3 = this;
@@ -73297,10 +73321,15 @@ var EmployeeEdit = function (_Component) {
                         'Fire Employee'
                     )
                 ),
-                _react2.default.createElement(_common.Confirm, {
-                    visible: this.state.showModal,
-                    message: 'Are you sure you want to delete this?'
-                })
+                _react2.default.createElement(
+                    _common.Confirm,
+                    {
+                        visible: this.state.showModal,
+                        onAccept: this.onAccept.bind(this),
+                        onDecline: this.onDecline.bind(this)
+                    },
+                    'Are you sure you want to delete this?'
+                )
             );
         }
     }]);
@@ -73316,7 +73345,9 @@ var mapStateToProps = function mapStateToProps(state) {
     return { name: name, phone: phone, shift: shift };
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, { employeeUpdate: _actions.employeeUpdate, employeeSave: _actions.employeeSave })(EmployeeEdit);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, {
+    employeeUpdate: _actions.employeeUpdate, employeeSave: _actions.employeeSave, employeeDelete: _actions.employeeDelete
+})(EmployeeEdit);
 }, 540, null, "manager/src/components/employee.edit.js");
 __d(/* react-native-communications/AKCommunications.js */function(global, require, module, exports) {'use strict';
 
