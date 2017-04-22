@@ -60663,6 +60663,7 @@ var LOGIN_USER = exports.LOGIN_USER = 'login_user';
 var EMPLOYEE_UPDATE = exports.EMPLOYEE_UPDATE = 'employee_update';
 var EMPLOYEE_CREATE = exports.EMPLOYEE_CREATE = 'employee_create';
 var EMPLOYEE_FETCH_SUCCESS = exports.EMPLOYEE_FETCH_SUCCESS = 'employee_fetch_success';
+var EMPLOYEE_SAVE_SUCCESS = exports.EMPLOYEE_SAVE_SUCCESS = 'employee_save_success';
 }, 473, null, "manager/src/actions/type.js");
 __d(/* manager/src/reducer/EmployeeFormReducer.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
     value: true
@@ -60680,6 +60681,8 @@ exports.default = function () {
         case _type.EMPLOYEE_UPDATE:
             return babelHelpers.extends({}, state, babelHelpers.defineProperty({}, action.payload.prop, action.payload.value));
         case _type.EMPLOYEE_CREATE:
+            return INITIAL_STATE;
+        case _type.EMPLOYEE_SAVE_SUCCESS:
             return INITIAL_STATE;
         default:
             return state;
@@ -66070,7 +66073,7 @@ var loginUserSuccess = function loginUserSuccess(dispatch, user) {
 __d(/* manager/src/actions/employee.action.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.employeeFetch = exports.employeeCreate = exports.employeeUpdate = undefined;
+exports.employeeSave = exports.employeeFetch = exports.employeeCreate = exports.employeeUpdate = undefined;
 
 var _firebase = require(459       ); // 459 = firebase
 
@@ -66115,6 +66118,23 @@ var employeeFetch = exports.employeeFetch = function employeeFetch() {
                 type: _type.EMPLOYEE_FETCH_SUCCESS,
                 payload: snapshot.val()
             });
+        });
+    };
+};
+
+var employeeSave = exports.employeeSave = function employeeSave(_ref3) {
+    var name = _ref3.name,
+        phone = _ref3.phone,
+        shift = _ref3.shift,
+        uid = _ref3.uid;
+
+    var _firebase$auth3 = _firebase2.default.auth(),
+        currentUser = _firebase$auth3.currentUser;
+
+    return function (dispatch) {
+        _firebase2.default.database().ref('/users/' + currentUser.uid + '/employees/' + uid).set({ name: name, phone: phone, shift: shift }).then(function () {
+            dispatch({ type: _type.EMPLOYEE_SAVE_SUCCESS });
+            _reactNativeRouterFlux.Actions.employeeList({ type: 'reset' });
         });
     };
 };
@@ -73115,7 +73135,17 @@ var EmployeeEdit = function (_Component) {
         }
     }, {
         key: 'onButtonPress',
-        value: function onButtonPress() {}
+        value: function onButtonPress() {
+            var _props = this.props,
+                name = _props.name,
+                phone = _props.phone,
+                shift = _props.shift;
+
+            this.props.employeeSave({ name: name, phone: phone, shift: shift, uid: this.props.employee.uid });
+        }
+    }, {
+        key: 'onTextPress',
+        value: function onTextPress() {}
     }, {
         key: 'render',
         value: function render() {
@@ -73130,6 +73160,15 @@ var EmployeeEdit = function (_Component) {
                         _common.Button,
                         { onPress: this.onButtonPress.bind(this) },
                         'Save Changes'
+                    )
+                ),
+                _react2.default.createElement(
+                    _common.CardSection,
+                    null,
+                    _react2.default.createElement(
+                        _common.Button,
+                        { onPress: this.onTextPress.bind(this) },
+                        'Text Schedule'
                     )
                 )
             );
@@ -73147,7 +73186,7 @@ var mapStateToProps = function mapStateToProps(state) {
     return { name: name, phone: phone, shift: shift };
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, { employeeUpdate: _actions.employeeUpdate })(EmployeeEdit);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, { employeeUpdate: _actions.employeeUpdate, employeeSave: _actions.employeeSave })(EmployeeEdit);
 }, 540, null, "manager/src/components/employee.edit.js");
 ;require(72);
 ;require(0);
