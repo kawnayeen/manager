@@ -9,7 +9,7 @@ import { CardSection } from './common';
 class EmployeeListItem extends Component {
 
     onRowPress() {
-        Actions.employeeCreate();
+        Actions.employeeEdit({ employee: this.props.employee });
     }
 
     render() {

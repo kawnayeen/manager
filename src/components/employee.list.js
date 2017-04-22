@@ -4,9 +4,9 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Text, ListView } from 'react-native';
+import { ListView } from 'react-native';
 import { employeeFetch } from '../actions';
-import EmployeeListItem from './EmployeeListItem';
+import EmployeeListItem from './employee.list.item';
 
 
 class EmployeeList extends Component {
